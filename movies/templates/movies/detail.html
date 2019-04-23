@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block body %}
+<h1>{{movie.title}}</h1>
+<h5>누적관객수 : {{movie.audience}}</h5>
+<h5>포스터 : <img src="{{movie.poster_url}}"></img></h5>
+<h5>영화소개 : {{movie.description}}</h5>
+
+{% for score in movie.score_set.all %}
+    <p>{{score.user.username}}</p>
+    <p>한줄평 : {{score.content}}</p>
+    <p>평점 : {{score.value}}</p>
+    {% if score.user == user %}
+        <form action="{% url 'movies:score_delete' movie.id score.id %}" method='post'>
+            {% csrf_token %}
+            <input type="submit" value="삭제">
+        </form>
+    {% endif %}
+    <hr>
+{% endfor %}
+
+<form action="{% url 'movies:scores_new' movie.id %}" method="post">
+    {% csrf_token %}
+    <div>한줄평 {{form.content}}</div>
+    <div>평점 {{form.value}}</div>
+    <input type="submit" value="submit">
+</form>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <h1>{{user_info.username}}</h1>
+    
+    {% if user != user_info %}
+        {% if user_info in user.from_user.all %}
+            <a href="{% url 'accounts:follow' user_info.id %}" class="btn btn-light">팔로잉</a>
+        {% else %}
+            <a href="{% url 'accounts:follow' user_info.id %}" class="btn btn-primary">팔로우</a>
+        {% endif %}
+    {% else %}
+        {% for follow in user.from_user.all %}
+            <h4>{{follow.username}} 님의 추천 영화</h4>
+            <p>{{follow.score_set.first.movie.title}} {{follow.score_set.first.value}}</p>
+        {% endfor %}
+    {% endif %}
+    
+    <h4>팔로잉 <a href="{% url 'accounts:followings' user_info.id %}">{{user_info.from_user.count}}</a></h4>
+    <h4>팔로워 <a href="{% url 'accounts:followers' user_info.id %}">{{user_info.to_user.count}}</a></h4>
+    <br>
+    
+    <h4>평점정보</h4>
+    {% for score in user_info.score_set.all %}
+        <p>{{score.movie.title}} : {{score.value}} 점</p>
+    {% endfor %}
+    
+    
+{% endblock %}

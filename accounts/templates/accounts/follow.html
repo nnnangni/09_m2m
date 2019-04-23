@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <h1>{{user.username}}</h1>
+    {% if request.resolver_match.url_name == 'followers' %}
+        <h5>팔로워 {{user.to_user.count}} 명</h5>
+    {% elif request.resolver_match.url_name == 'followings' %}
+        <h5>팔로잉 {{user.from_user.count}} 명</h5>
+    {% endif %}
+    
+    {% for follow in follows %}
+        <p>{{follow.username}}</p>
+    {% endfor %}
+    
+{% endblock %}
